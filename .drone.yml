@@ -1,0 +1,72 @@
+kind: pipeline
+type: docker
+name: Build
+
+volumes:
+- name: dockersock
+  host:
+    path: /var/run/docker.sock
+
+steps:
+  - name: build
+    when:
+      branch:
+      - master
+      event:
+      - push
+    image: node:alpine
+    environment:
+      DOCKER_IMAGE_TAG:
+        from_secret: docker_image_tag
+    commands:
+      - apk add docker
+      - npm install
+      - docker build . -t $DOCKER_IMAGE_TAG
+    when:
+      branch:
+      - master
+      event:
+        exclude:
+        - promote
+    volumes:
+    - name: dockersock
+      path: /var/run/docker.sock
+
+---
+
+kind: pipeline
+type: docker
+name: Deploy
+
+volumes:
+- name: dockersock
+  host:
+    path: /var/run/docker.sock
+
+steps:
+  - name: promote
+    clone:
+      disable: true
+    when:
+      branch:
+      - master
+      event:
+      - promote
+      target:
+      - dockerhub
+    image: alpine
+    environment:
+      DOCKER_PASSWORD:
+        from_secret: docker_password
+      DOCKER_USERNAME:
+        from_secret: docker_username
+      DOCKER_IMAGE_TAG:
+        from_secret: docker_image_tag
+    commands:
+      - rm -rf .devcontainer .gitignore .git
+      - apk add docker
+      - docker login --password $DOCKER_PASSWORD --username $DOCKER_USERNAME
+      - docker push $DOCKER_IMAGE_TAG
+    volumes:
+    - name: dockersock
+      path: /var/run/docker.sock
