@@ -3,9 +3,8 @@ FROM node:alpine
 RUN mkdir /app
 WORKDIR /app
 
-COPY node_modules .
+COPY package.json .
 COPY index.js .
-
-EXPOSE ${PORT}
+RUN npm install
 
 CMD [ "node", "index.js" ]
