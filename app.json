@@ -1,0 +1,7 @@
+{
+    "name": "Homer-proxy",
+    "description": "A proxy to be able to monitor the health of endpoint by bypassing CORS limitations",
+    "repository": "https://git.aymane.xyz/nimda95/homer-proxy",
+    "logo": "https://git.aymane.xyz/repo-avatars/9-471c3507cf3400229a66d6682ce45529",
+    "keywords": ["docker", "node", "homer"]
+  }

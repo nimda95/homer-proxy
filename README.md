@@ -49,6 +49,10 @@ services:
             - CORS_ORIGIN='*' 			# value to put in the CORS header. Defaults to '*'
         restart:  unless-stopped
 ```
+- On Heroku
+
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://www.heroku.com/deploy/?template=https://github.com/nimda95/homer-proxy.git)
+
 ### 3. Usage
 In this example we assume that the `homer-proxy` instance is hosted on `https://health.aymane.xyz`
 ```yaml
